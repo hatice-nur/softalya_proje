@@ -1,1 +1,1 @@
-console.log("hatice")
+console.log("haticeDnenemdsad")
