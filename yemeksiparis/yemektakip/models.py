@@ -1,16 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Customer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone_number = models.CharField(max_length=15)
+class Müşteri(models.Model):
+    name=models.CharField(max_length=50)
+    surname=models.CharField(max_length=100)
+    phone_number = models.PhoneNumberField(_(max_length=10))
     address = models.CharField(max_length=255)
-    city = models.CharField(max_length=100)
-    postal_code = models.CharField(max_length=10)
-    date_joined = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user.username
+        return self.name
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=100)
@@ -20,8 +18,9 @@ class Restaurant(models.Model):
     def __str__(self):
         return self.name
 
-class Meal(models.Model):
+class Yemek(models.Model):
     name = models.CharField(max_length=100)
+    image=models.ImageField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
     description = models.TextField()
     category = models.CharField(max_length=50)
@@ -31,8 +30,8 @@ class Meal(models.Model):
         return self.name
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    items = models.ManyToManyField(Meal, through='OrderItem')
+    customer = models.ForeignKey(Müşteri, on_delete=models.CASCADE)
+    items = models.ManyToManyField(Yemek, through='OrderItem')
     delivery_address = models.CharField(max_length=255)
     order_date = models.DateTimeField(auto_now_add=True)
     is_delivered = models.BooleanField(default=False)
